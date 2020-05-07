@@ -95,7 +95,7 @@
 <script>
 import MyHeader from '../../components/common/my-header'
 import areaList from '../../assets/js/area'
-import axios from 'axios'
+import BMap from 'BMap'
 import { Field, CellGroup, Button, Cell, Area, Picker, DropdownMenu, DropdownItem } from 'vant'
 export default {
   components: {
@@ -170,7 +170,8 @@ export default {
         return res
       }, '')
     },
-    onLoad () {
+    async onLoad () {
+      await this.getLocation()
       this.getHourseList()
     },
     onRefresh () {
@@ -195,38 +196,20 @@ export default {
       this.condition.yposition = item.location.lat
       this.showAddressBaidu = false
     },
-    handleSearchAddress () {
-      this.getArea(this.condition.descAddress)
-      this.showAddressBaidu = true
-    },
-    getArea (address) {
-      axios.get('/apibaidu/place/v2/suggestion', {
-        params: {
-          query: address,
-          region: '全国',
-          output: 'json',
-          ak: 'lIXbW84tKu6oNCj0bbgTnau7'
-        }
-      }).then(res => {
-        this.areaforBaiduList = res.data.result
-        console.log(res)
-      })
-    },
     getLocation () {
-      axios.get('/apibaidu/location/ip', {
-        params: {
-          ak: 'lIXbW84tKu6oNCj0bbgTnau7',
-          coor: 'bd09ll'
-        }
-      }).then(res => {
-        console.log(res)
-        this.condition.province = res.data.content.address_detail.province
-        this.condition.city = res.data.content.address_detail.city
-        this.condition.district = res.data.content.address_detail.district
-        this.address = `${res.data.content.address_detail.province} - ${res.data.content.address_detail.city} - ${res.data.content.address_detail.district}`
-        this.condition.descAddress = res.data.content.address
-        this.condition.xposition = res.data.content.point.x // 113.30764968 // res.data.content.point.x
-        this.condition.yposition = res.data.content.point.y // 23.12004910 // res.data.content.point.y
+      return new Promise(resolve => {
+        var geolocation = new BMap.Geolocation()
+        var self = this
+        geolocation.getCurrentPosition(function (r) {
+          if (this.getStatus() === 0) {
+            console.log(r.point)
+            self.condition.xposition = r.point.lng
+            self.condition.yposition = r.point.lat
+            resolve()
+          } else {
+            alert('failed' + this.getStatus())
+          }
+        }, { enableHighAccuracy: true })
       })
     },
     handleClickClose () {
@@ -247,8 +230,8 @@ export default {
   },
   mounted () {
     // this.getLocation()
-    this.condition.xposition = 113.30764968 // res.data.content.point.x
-    this.condition.yposition = 23.12004910 // res.data.content.point.y
+    // this.condition.xposition = 113.30764968 // res.data.content.point.x
+    // this.condition.yposition = 23.12004910 // res.data.content.point.y
   }
 }
 </script>

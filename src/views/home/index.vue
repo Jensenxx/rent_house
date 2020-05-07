@@ -55,6 +55,7 @@
 <script>
 import footbar from '@/components/common/foot-bar'
 import Vue from 'vue'
+import BMap from 'BMap'
 import { Cell, List, PullRefresh, Field, Swipe, SwipeItem, Lazyload, Image as VanImage } from 'vant'
 Vue.use(Lazyload)
 Vue.use(VanImage)
@@ -110,7 +111,8 @@ export default {
         }
       })
     },
-    onLoad () {
+    async onLoad () {
+      await this.getLocation()
       this.getHourseList()
     },
     onRefresh () {
@@ -127,6 +129,22 @@ export default {
         this.condition.currentPage++
         this.loading = false
         this.finished = true
+      })
+    },
+    getLocation () {
+      return new Promise(resolve => {
+        var geolocation = new BMap.Geolocation()
+        var self = this
+        geolocation.getCurrentPosition(function (r) {
+          if (this.getStatus() === 0) {
+            console.log(r.point)
+            self.condition.xposition = r.point.lng
+            self.condition.yposition = r.point.lat
+            resolve()
+          } else {
+            alert('failed' + this.getStatus())
+          }
+        }, { enableHighAccuracy: true })
       })
     }
   }
