@@ -22,7 +22,8 @@ import {
   Grid,
   GridItem,
   Icon,
-  Button
+  Button,
+  Field
 } from 'vant'
 
 Vue.config.productionTip = false
@@ -42,6 +43,7 @@ Vue.use(Grid)
 Vue.use(GridItem)
 Vue.use(Icon)
 Vue.use(Button)
+Vue.use(Field)
 Vue.prototype.$api = api
 Vue.prototype.showToast = obj => Toast({
   type: obj.type || 'text',

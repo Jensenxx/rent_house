@@ -140,6 +140,19 @@ export default {
       })
     },
     endContract (item) {
+      let flag = false
+      this.$api('countContractRequest', 'get', {
+        houseContractNum: this.contractList[this.currentIndex].contractNum
+      }).then(res => {
+        console.log(res)
+        if (res.data !== 0) {
+          this.showToast({ msg: '当前已申请该合同请求, 请等待' })
+          flag = true
+        }
+      })
+      if (flag) {
+        return
+      }
       this.$dialog.confirm({
         title: '提示',
         message: '确定要解约吗?'
@@ -159,7 +172,16 @@ export default {
     },
     handleContinueContract (index) {
       this.currentIndex = index
-      this.showDialog = true
+      this.$api('countContractRequest', 'get', {
+        houseContractNum: this.contractList[this.currentIndex].contractNum
+      }).then(res => {
+        console.log(res)
+        if (res.data === 0) {
+          this.showDialog = true
+        } else {
+          this.showToast({ msg: '当前已申请该合同请求, 请等待' })
+        }
+      })
     },
     handleConfirm () {
       console.log(this.contractList[this.currentIndex], this.durationMonth)

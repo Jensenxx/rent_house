@@ -9,9 +9,9 @@
         @load="onLoad"
         finished-text="没有更多了"
       >
-        <div class="container van-hairline--bottom" v-for="item in houseList" :key="item.id">
+        <div class="container van-hairline--bottom" v-for="item in houseList" :key="item.id" @click="$router.push(`/mine/houseDetail/${item.houseNum}`)">
           <div class="left">
-            <img src="https://img.yzcdn.cn/vant/apple-1.jpg" alt="">
+            <img :src="item.photosAddress.split(',')[0]" alt="">
           </div>
           <div class="right">
             <h2>{{item.houseTitle}}</h2>

@@ -15,11 +15,9 @@
       <van-field
         label="详细地址:"
         placeholder="请输入"
-        right-icon="search"
         required
         clearable
         v-model="condition.descAddress"
-        @click-right-icon="handleSearchAddress"
       />
       <van-cell title="面积范围" class="floor" required>
         <template>
@@ -64,6 +62,7 @@
               <p>户型: {{item.unitType}}</p>
               <p>地址: {{item.address}}</p>
               <p>租金: {{item.rent}}/月</p>
+              <p>距离: {{item.length}}公里</p>
             </div>
           </div>
         </van-list>
@@ -162,6 +161,9 @@ export default {
     hanleConfirmCity (value) {
       console.log(value)
       this.showArea = false
+      this.condition.province = value[0].name
+      this.condition.city = value[1].name
+      this.condition.region = value[2].name
       this.address = value.reduce((res, item) => {
         res += item.name + ' '
         return res

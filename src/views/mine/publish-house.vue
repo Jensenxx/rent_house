@@ -93,7 +93,7 @@
       />
       <van-cell title="图片上传" class="floor" required>
         <template>
-          <van-uploader v-model="imgList"/>
+          <van-uploader multiple :max-count="5" v-model="imgList" :after-read="afterRead" />
         </template>
       </van-cell>
        <van-field
@@ -200,7 +200,7 @@ export default {
         houseDesc: '', // 房子描述
         contactPerson: '', // 联系人
         phoneNum: '', // 手机号
-        photosAddress: '', // 图片上传
+        photosAddress: [], // 图片上传
         xPosition: '', // 精度
         yPosition: '', // 维度
         ownUserNum: '' // 房子所属
@@ -220,6 +220,7 @@ export default {
       this.house.unitType = `${this.fang}房${this.ting}厅${this.wei}卫${this.chu}厨${this.yang}阳台`
       this.house.supportingFacilities = this.result.join('')
       this.house.ownUserNum = this.userInfo.userNum
+      this.house.photosAddress = this.house.photosAddress.join(',')
       console.log(this.house)
       this.$api('/addHouse', 'post', this.house).then(res => {
         this.showToast({ msg: '添加成功' })
@@ -266,6 +267,20 @@ export default {
       }).then(res => {
         this.areaforBaiduList = res.data.result
         console.log(res)
+      })
+    },
+    afterRead (file) {
+      console.log(file)
+      const formData = new FormData()
+      formData.append('uploadFile', file.file)
+      const that = this
+      axios.post('http://111.230.181.212:8081/jikezhu/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(res => {
+        console.log(res)
+        that.house.photosAddress.push(res.data.name)
       })
     }
   },

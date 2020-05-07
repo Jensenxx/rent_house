@@ -33,6 +33,10 @@ const routes = {
     {
       path: 'contractRequest',
       component: () => import('../views/mine/contract-request.vue')
+    },
+    {
+      path: 'houseDetail/:id',
+      component: () => import('../views/mine/house-detail.vue')
     }
   ]
 }

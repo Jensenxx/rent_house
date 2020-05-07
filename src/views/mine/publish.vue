@@ -11,7 +11,7 @@
       >
         <div class="container van-hairline--bottom" v-for="item in houseList" :key="item.id">
           <div class="left">
-            <img src="https://img.yzcdn.cn/vant/apple-1.jpg" alt="">
+            <img :src="item.photosAddress.split(',')[0]" alt="">
           </div>
           <div class="right">
             <h2>{{item.houseTitle}}</h2>
@@ -70,6 +70,9 @@ export default {
         pageSize: this.pageSize
       }).then(res => {
         console.log(res)
+        // res.data.datas.forEach(item => {
+        //   item.photosAddress = item.photosAddress.split(',')
+        // })
         this.houseList = this.houseList.concat(res.data.datas)
         if (type === 'refresh') {
           this.houseList = []
