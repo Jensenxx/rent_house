@@ -11,6 +11,7 @@
     "axios": "^0.19.2",
     "babel-plugin-import": "^1.13.0",
     "core-js": "^3.6.4",
+    "img-vuer": "^0.19.2",
     "lib-flexible": "^0.3.2",
     "pdfvuer": "^1.6.0",
     "postcss-loader": "^3.0.0",

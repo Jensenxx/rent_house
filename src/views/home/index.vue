@@ -26,18 +26,28 @@
     </div>
 
     <van-cell title="最新房源" value="" />
-    <div class="house-container van-hairline--bottom">
-      <div class="left">
-        <img src="https://img.yzcdn.cn/vant/apple-1.jpg" alt="">
-      </div>
-      <div class="right">
-        <h2>测试测试</h2>
-        <p>楼层: 7/35, 面积: 50 平方</p>
-        <p>户型: 1厅2室1卫1厨1阳台</p>
-        <p>地址: 广州市天河区xx小区</p>
-        <p>租金: 3000/月</p>
-      </div>
-    </div>
+    <van-pull-refresh v-model="loading" @refresh="onRefresh">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          :offset="10"
+          @load="onLoad"
+          finished-text="没有更多了"
+        >
+          <div class="house-container van-hairline--bottom" v-for="(item, index) in houseList" :key="index" @click="$router.push(`/home/houseDetail/${item.houseNum}`)">
+            <div class="left">
+              <img src="https://img.yzcdn.cn/vant/apple-1.jpg" alt="">
+            </div>
+            <div class="right">
+              <h2>{{item.houseTitle}}</h2>
+              <p>楼层: {{item.floor}}/{{item.allFloor}}, 面积: {{item.area}} 平方</p>
+              <p>户型: {{item.unitType}}</p>
+              <p>地址: {{item.address}}</p>
+              <p>租金: {{item.rent}}/月</p>
+            </div>
+          </div>
+        </van-list>
+    </van-pull-refresh>
     <footbar :active=0 />
   </div>
 </template>
@@ -70,7 +80,22 @@ export default {
         { src: require('../../assets/images/home/house.png'), desc: '租房' },
         { src: require('../../assets/images/home/publish.png'), desc: '发布房源' },
         { src: require('../../assets/images/home/answer.png'), desc: '问答' }
-      ]
+      ],
+      loading: false,
+      finished: false,
+      condition: {
+        xposition: 113.30764968, // 精度
+        yposition: 23.1200491, // 维度
+        currentPage: 1, // 当前页码
+        pageSize: 10, // 页码大小
+        ownUserNum: ''
+      },
+      houseList: []
+    }
+  },
+  computed: {
+    userInfo () {
+      return this.$store.state.userInfo
     }
   },
   methods: {
@@ -83,6 +108,25 @@ export default {
         query: {
           active: 1
         }
+      })
+    },
+    onLoad () {
+      this.getHourseList()
+    },
+    onRefresh () {
+      this.condition.currentPage = 1
+      this.getHourseList('refresh')
+    },
+    getHourseList (type) {
+      this.condition.ownUserNum = this.userInfo.userNum
+      this.$api('/getConditionHouse', 'post', this.condition).then(res => {
+        console.log(res)
+        res.data.resultHouses === null && (res.data.resultHouses = [])
+        this.houseList = this.houseList.concat(res.data.resultHouses)
+        type === 'refresh' && (this.houseList = (res.data.resultHouses))
+        this.condition.currentPage++
+        this.loading = false
+        this.finished = true
       })
     }
   }
@@ -120,7 +164,7 @@ export default {
   }
   .house-container{
     width: 100%;
-    height: 300px;
+    height: 320px;
     background: #fff;
     display: flex;
     align-items: center;

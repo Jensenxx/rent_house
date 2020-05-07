@@ -51,6 +51,7 @@
           :finished="finished"
           :offset="10"
           @load="onLoad"
+          finished-text="没有更多了"
         >
           <div class="container van-hairline--bottom" v-for="(item, index) in houseList" :key="index" @click="handleClick(item.houseNum)">
             <div class="left">

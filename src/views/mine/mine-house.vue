@@ -19,8 +19,8 @@
             <p>户型: {{item.unitType}}</p>
             <p>地址: {{`${item.province}${item.city}${item.region}${item.descAddress}${item.building}栋${item.unit}单元`}}</p>
             <p>租金: {{item.rent}}/月</p>
-            <van-button size="small" type="info" class="publish" :disabled="item.flag" @click="publishHourse(item)">发布</van-button>
-            <van-button size="small" type="danger" @click="handleDel(item)">删除</van-button>
+            <van-button size="small" type="info" class="publish" :disabled="item.flag" @click.stop="publishHourse(item)">发布</van-button>
+            <van-button size="small" type="danger" @click.stop="handleDel(item)">删除</van-button>
           </div>
         </div>
       </van-list>

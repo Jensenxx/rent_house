@@ -5,6 +5,7 @@ import store from './store'
 import 'lib-flexible'
 import './assets/css/reset.css'
 import api from './api'
+import gallery from 'img-vuer'
 import {
   Toast,
   Popup,
@@ -44,6 +45,7 @@ Vue.use(GridItem)
 Vue.use(Icon)
 Vue.use(Button)
 Vue.use(Field)
+Vue.use(gallery)
 Vue.prototype.$api = api
 Vue.prototype.showToast = obj => Toast({
   type: obj.type || 'text',

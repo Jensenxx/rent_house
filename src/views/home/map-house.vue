@@ -22,9 +22,19 @@ export default {
         console.log(point)
         if (point) {
           map.centerAndZoom(point, 16)
-          map.addOverlay(new BMap.Marker(point))
         }
       })
+      var geolocation = new BMap.Geolocation()
+      geolocation.getCurrentPosition(function (r) {
+        if (this.getStatus() === 0) {
+          var mk = new BMap.Marker(r.point)
+          map.addOverlay(mk)
+          map.panTo(r.point)
+          // alert('您的位置：' + r.point.lng + ',' + r.point.lat)
+        } else {
+          alert('failed' + this.getStatus())
+        }
+      }, { enableHighAccuracy: true })
     }
   },
   mounted () {

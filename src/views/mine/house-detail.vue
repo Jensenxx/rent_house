@@ -13,7 +13,7 @@
       <van-cell title="房源描述" :value="houseDetail.houseDesc"></van-cell>
       <van-cell title="联系人" :value="houseDetail.contactPerson"></van-cell>
       <van-cell title="手机" :value="houseDetail.phoneNum"></van-cell>
-      <img :src="item" alt="" srcset="" v-for="(item, index) in houseDetail.photosAddress" :key="index">
+      <img v-gallery:groupName :src="item" alt="" srcset="" v-for="(item, index) in houseDetail.photosAddress" :key="index">
       <!-- <van-uploader
         multiple
         :max-count="5"
@@ -91,16 +91,21 @@ export default {
       canvas.width = 1440
       canvas.height = 1080
       const img = document.createElement('img')
-      img.setAttribute('crossOrigin', 'Anonymous')
+      // img.setAttribute('crossOrigin', 'Anonymous')
       img.src = src
       const self = this
-      img.onload = function () {
-        context.drawImage(img, 0, 0, 1440, 1080)
-        console.log(canvas.toDataURL('image/jpeg', 0.5))
-        self.fileList.push({
-          content: canvas.toDataURL('image/jpeg', 0.8)
-        })
-      }
+      context.drawImage(img, 0, 0, 1440, 1080)
+      console.log(canvas.toDataURL('image/jpeg', 0.5))
+      self.fileList.push({
+        content: canvas.toDataURL('image/jpeg', 0.8)
+      })
+      // img.onload = function () {
+      //   context.drawImage(img, 0, 0, 1440, 1080)
+      //   console.log(canvas.toDataURL('image/jpeg', 0.5))
+      //   self.fileList.push({
+      //     content: canvas.toDataURL('image/jpeg', 0.8)
+      //   })
+      // }
     },
     submit () {
       this.$api('/reservationHouse', 'post', {
