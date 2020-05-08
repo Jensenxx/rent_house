@@ -36,7 +36,7 @@
         >
           <div class="house-container van-hairline--bottom" v-for="(item, index) in houseList" :key="index" @click="$router.push(`/home/houseDetail/${item.houseNum}`)">
             <div class="left">
-              <img src="https://img.yzcdn.cn/vant/apple-1.jpg" alt="">
+              <img :src="item.photosAddress.split(',')[0]" alt="">
             </div>
             <div class="right">
               <h2>{{item.houseTitle}}</h2>
@@ -73,8 +73,9 @@ export default {
     return {
       search: '',
       images: [
-        'https://img.yzcdn.cn/vant/apple-1.jpg',
-        'https://img.yzcdn.cn/vant/apple-2.jpg'
+        'http://lijy.oss-cn-shenzhen.aliyuncs.com/images/2020/05/08/15889248109216230.jpg',
+        'http://lijy.oss-cn-shenzhen.aliyuncs.com/images/2020/05/08/15889251339947359.jpg',
+        'http://lijy.oss-cn-shenzhen.aliyuncs.com/images/2020/05/08/1588925173467185.jpg'
       ],
       itemList: [
         { src: require('../../assets/images/home/map.png'), desc: '地图找房' },

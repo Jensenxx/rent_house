@@ -140,34 +140,30 @@ export default {
       })
     },
     endContract (item) {
-      let flag = false
       this.$api('countContractRequest', 'get', {
         houseContractNum: this.contractList[this.currentIndex].contractNum
       }).then(res => {
         console.log(res)
         if (res.data !== 0) {
           this.showToast({ msg: '当前已申请该合同请求, 请等待' })
-          flag = true
+        } else {
+          this.$dialog.confirm({
+            title: '提示',
+            message: '确定要解约吗?'
+          }).then(() => {
+            this.$api('/endContract', 'get', {
+              houseContractNum: item.contractNum,
+              requestType: 'jieyue',
+              userNum: this.userInfo.userNum,
+              xuyueTime: 0
+            }).then(res => {
+              this.showToast({ msg: '解约成功' })
+              setTimeout(() => {
+                this.getContractList()
+              }, 800)
+            })
+          })
         }
-      })
-      if (flag) {
-        return
-      }
-      this.$dialog.confirm({
-        title: '提示',
-        message: '确定要解约吗?'
-      }).then(() => {
-        this.$api('/endContract', 'get', {
-          houseContractNum: item.contractNum,
-          requestType: 'jieyue',
-          userNum: this.userInfo.userNum,
-          xuyueTime: 0
-        }).then(res => {
-          this.showToast({ msg: '解约成功' })
-          setTimeout(() => {
-            this.getContractList()
-          }, 800)
-        })
       })
     },
     handleContinueContract (index) {
@@ -249,11 +245,11 @@ export default {
       }
       .van-button--small{
         position: absolute;
-        right: 20px;
-        top: 40px;
+        right: 160px;
+        bottom: 15px;
       }
       .cancel{
-        top: 150px;
+        right: 20px;
       }
     }
   }

@@ -33,7 +33,7 @@
           <input placeholder="" v-model.number="condition.minRent" maxlength="4"/>~
           <input placeholder="" v-model.number="condition.maxRent" maxlength="4"/>
           <van-button size="small" type="info" @click="handleClickClose">附近房源</van-button>
-          <van-button size="small" type="info" style="margin-left: 15px" @click="getHourseList('refresh')">查询</van-button>
+          <van-button size="small" type="info" style="margin-left: 15px" @click="onRefresh">查询</van-button>
         </template>
       </van-cell>
     </van-cell-group>
@@ -55,7 +55,7 @@
         >
           <div class="container van-hairline--bottom" v-for="(item, index) in houseList" :key="index" @click="handleClick(item.houseNum)">
             <div class="left">
-              <img src="https://img.yzcdn.cn/vant/apple-1.jpg" alt="">
+              <img :src="item.photosAddress.split(',')[0]" alt="">
             </div>
             <div class="right">
               <h2>{{item.houseTitle}}</h2>
@@ -274,7 +274,7 @@ export default {
   }
   .container{
     width: 100%;
-    height: 350px;
+    height: 380px;
     background: #fff;
     display: flex;
     align-items: center;

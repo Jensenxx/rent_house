@@ -187,7 +187,7 @@ export default {
         bottom: 20px;
       }
       .publish{
-        bottom: 100px;
+        right: 160px;
       }
     }
   }

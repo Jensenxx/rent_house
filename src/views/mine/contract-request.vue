@@ -121,7 +121,7 @@ export default {
 <style lang="less" scoped>
   .container{
     width: 100%;
-    height: 330px;
+    height: 340px;
     background: #fff;
     display: flex;
     align-items: center;
@@ -140,11 +140,11 @@ export default {
       }
       .van-button--small{
         position: absolute;
-        right: 20px;
-        top: 40px;
+        right: 160px;
+        bottom: 20px;
       }
       .cancel{
-        top: 220px;
+        right: 20px;
       }
     }
   }
