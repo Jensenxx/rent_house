@@ -40,7 +40,7 @@
       </van-field>
     </van-dialog>
     <van-overlay :show="showContract" @click="showContract = false">
-      <div class="pdf-wrap" v-if="showContract">
+      <div class="pdf-wrap" v-if="showContract" ref="downpdf">
         <pdf :src="pdfSrc"></pdf>
         <div>{{contract.telnantName}}</div>
         <div>{{contract.telnantIdNum}}</div>
@@ -69,6 +69,7 @@
         <div>{{contract.beginDate.month}}</div>
         <div>{{contract.beginDate.date}}</div>
       </div>
+      <van-button size="small" type="info" class="downBtn" @click.stop="handleDownloadPDF">下载当前合同</van-button>
     </van-overlay>
   </div>
 </template>
@@ -78,6 +79,8 @@ import MyHeader from '../../components/common/my-header'
 import { Field, CellGroup, Button } from 'vant'
 import { formatDate } from '../../assets/js/utils'
 import pdf from 'vue-pdf'
+import html2canvas from 'html2canvas'
+import Jspdf from 'jspdf'
 export default {
   components: {
     MyHeader,
@@ -98,7 +101,8 @@ export default {
       loading: false,
       finished: false,
       currentPage: 1,
-      pageSize: 10
+      pageSize: 10,
+      downpdf: ''
     }
   },
   filters: {
@@ -157,7 +161,7 @@ export default {
               userNum: this.userInfo.userNum,
               xuyueTime: 0
             }).then(res => {
-              this.showToast({ msg: '解约成功' })
+              this.showToast({ msg: '解约请求已发送' })
               setTimeout(() => {
                 this.getContractList()
               }, 800)
@@ -216,6 +220,28 @@ export default {
           date: endDate.getDate()
         }
       })
+    },
+    handleDownloadPDF () {
+      const target = this.$refs.downpdf
+      const pdf = new Jspdf('', 'pt', 'a4')
+      html2canvas(target, {
+        scale: 2,
+        width: 592,
+        height: 841
+      }).then(canvas => {
+        const contentWidth = canvas.width
+        const contentHeight = canvas.height
+        // let pageHeight = contentWidth / 592 * 841
+        // let leftHeight = contentHeight
+        // let offsetX = 0
+        // let offsetY = 0
+        const imgWidth = 592
+        const imgHeight = 592 / contentWidth * contentHeight
+        const pageData = canvas.toDataURL('image/jpeg', 1.0)
+        pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight)
+        pdf.save('合同')
+      })
+      console.log(this.downpdf)
     }
   },
   mounted () {
@@ -252,6 +278,12 @@ export default {
         right: 20px;
       }
     }
+  }
+  .downBtn{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10%;
   }
   .pdf-wrap{
     width: 100%;
