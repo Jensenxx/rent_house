@@ -1,44 +1,59 @@
 <template>
   <div style="width:100%;height:100%">
     <my-header :title="'地图找房'" :leftArrow="true" @goBack="$router.go(-1)"/>
-    <div id='map'></div>
+    <baidu-map id="map" :zoom="zoom" @ready="handler" :center="center">
+      <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
+      <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
+      <bm-marker :position="center"></bm-marker>
+      <bm-marker :position="{lng: item.xPosition, lat: item.yPosition}" v-for="(item, index) in houseList" :key="index" @click="handleClick(item)">
+        <bm-label :content="item.houseTitle" :labelStyle="{color: '#000', fontSize : '12px'}" :offset="{width: -35, height: 30}"/>
+      </bm-marker>
+    </baidu-map>
   </div>
 </template>
 
 <script>
-import BMap from 'BMap'
 import MyHeader from '../../components/common/my-header'
 export default {
   components: {
     MyHeader
   },
+  data () {
+    return {
+      center: '',
+      zoom: 13,
+      houseList: [],
+      active: false
+    }
+  },
+  computed: {
+    userInfo () {
+      return this.$store.state.userInfo
+    }
+  },
   methods: {
-    createBMap (address) {
-      var map = new BMap.Map('map')
-      map.addControl(new BMap.NavigationControl())
-      map.addControl(new BMap.GeolocationControl())
-      var myGeo = new BMap.Geocoder()
-      myGeo.getPoint(address, function (point) {
-        console.log(point)
-        if (point) {
-          map.centerAndZoom(point, 16)
-        }
-      })
-      var geolocation = new BMap.Geolocation()
-      geolocation.getCurrentPosition(function (r) {
-        if (this.getStatus() === 0) {
-          var mk = new BMap.Marker(r.point)
-          map.addOverlay(mk)
-          map.panTo(r.point)
-          // alert('您的位置：' + r.point.lng + ',' + r.point.lat)
-        } else {
-          alert('failed' + this.getStatus())
-        }
+    handler ({ BMap, map }) {
+      const geolocation = new BMap.Geolocation()
+      geolocation.getCurrentPosition((r) => {
+        console.log(r)
+        this.center = { lng: r.longitude, lat: r.latitude }
       }, { enableHighAccuracy: true })
+    },
+    handleClick (item) {
+      console.log(item)
+      this.$router.push(`/home/houseDetail/${item.houseNum}`)
+    },
+    getHouseList () {
+      this.$api('/listAllHouse', 'get', {
+        userNum: this.userInfo.userNum
+      }).then(res => {
+        console.log(res)
+        this.houseList = res.data
+      })
     }
   },
   mounted () {
-    this.createBMap('广东省广州市')
+    this.getHouseList()
   }
 }
 </script>

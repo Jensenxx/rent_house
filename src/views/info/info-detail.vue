@@ -39,6 +39,7 @@ export default {
   .info-detail{
     .info{
       margin-top: 20px;
+      padding: 20px;
       background: #fff;
       h2{
         font-size: 18px; /*no*/

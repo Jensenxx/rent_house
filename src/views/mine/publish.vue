@@ -9,7 +9,7 @@
         @load="onLoad"
         finished-text="没有更多了"
       >
-        <div class="container van-hairline--bottom" v-for="item in houseList" :key="item.id">
+        <div class="container van-hairline--bottom" v-for="item in houseList" :key="item.id" @click="$router.push(`/mine/houseDetail/${item.houseNum}`)" >
           <div class="left">
             <img :src="item.photosAddress.split(',')[0]" alt="">
           </div>

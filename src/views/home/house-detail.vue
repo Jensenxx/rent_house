@@ -13,6 +13,11 @@
       <van-cell title="房源描述" :value="houseDetail.houseDesc"></van-cell>
       <van-cell title="联系人" :value="houseDetail.contactPerson"></van-cell>
       <van-cell title="手机" :value="houseDetail.phoneNum"></van-cell>
+      <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+        <van-swipe-item v-for="(image, index) in houseDetail.photosAddress" :key="index">
+          <img v-gallery:groupName :src="image" />
+        </van-swipe-item>
+      </van-swipe>
       <van-cell title="选择看房时间" :value="bookTime || '请选择'" is-link @click="showTime=true"></van-cell>
       <van-button type="info" size="small" style="margin:30px 0 30px 50%;transform: translate(-50%,0);" @click="submit">提交</van-button>
     </van-cell-group>
@@ -69,6 +74,7 @@ export default {
         houseNum: this.$route.params.id
       }).then(res => {
         console.log(res)
+        res.data.photosAddress = res.data.photosAddress.split(',')
         this.houseDetail = res.data
       })
     },
@@ -111,6 +117,18 @@ export default {
       .van-checkbox{
         margin-top:15px;
       }
+    }
+  }
+  .my-swipe .van-swipe-item {
+    color: #fff;
+    font-size: 20px;
+    text-align: center;
+    background-color: #39a9ed;
+    height: 400px;
+    margin-top: 20px;
+    img {
+      width: 100%;
+      height: 100%;
     }
   }
 </style>

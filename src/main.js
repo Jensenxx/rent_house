@@ -6,6 +6,7 @@ import 'lib-flexible'
 import './assets/css/reset.css'
 import api from './api'
 import gallery from 'img-vuer'
+import BaiduMap from 'vue-baidu-map'
 import {
   Toast,
   Popup,
@@ -24,7 +25,10 @@ import {
   GridItem,
   Icon,
   Button,
-  Field
+  Field,
+  Swipe,
+  SwipeItem,
+  Lazyload
 } from 'vant'
 
 Vue.config.productionTip = false
@@ -46,6 +50,12 @@ Vue.use(Icon)
 Vue.use(Button)
 Vue.use(Field)
 Vue.use(gallery)
+Vue.use(Swipe)
+Vue.use(SwipeItem)
+Vue.use(Lazyload)
+Vue.use(BaiduMap, {
+  ak: 'lIXbW84tKu6oNCj0bbgTnau7'
+})
 Vue.prototype.$api = api
 Vue.prototype.showToast = obj => Toast({
   type: obj.type || 'text',

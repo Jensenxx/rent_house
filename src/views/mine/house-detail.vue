@@ -1,6 +1,6 @@
 <template>
   <div class="house-detail">
-    <my-header :title="'预约看房'" :leftArrow="true" @goBack="handleGoBack"/>
+    <my-header :title="'房子详情'" :leftArrow="true" @goBack="handleGoBack"/>
     <van-cell-group>
       <van-cell title="标题" :value="houseDetail.houseTitle"></van-cell>
       <van-cell title="地址" :value="houseDetail.province + houseDetail.city + houseDetail.region + houseDetail.descAddress"></van-cell>
@@ -13,7 +13,12 @@
       <van-cell title="房源描述" :value="houseDetail.houseDesc"></van-cell>
       <van-cell title="联系人" :value="houseDetail.contactPerson"></van-cell>
       <van-cell title="手机" :value="houseDetail.phoneNum"></van-cell>
-      <img v-gallery:groupName :src="item" alt="" srcset="" v-for="(item, index) in houseDetail.photosAddress" :key="index">
+      <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+        <van-swipe-item v-for="(image, index) in houseDetail.photosAddress" :key="index">
+          <img v-gallery:groupName :src="image" />
+        </van-swipe-item>
+      </van-swipe>
+      <!-- <img v-gallery:groupName :src="item" alt="" srcset="" v-for="(item, index) in houseDetail.photosAddress" :key="index"> -->
       <!-- <van-uploader
         multiple
         :max-count="5"
@@ -78,34 +83,9 @@ export default {
       }).then(res => {
         console.log(res)
         res.data.photosAddress = res.data.photosAddress.split(',')
-        // res.data.photosAddress.forEach(item => {
-        //   this.toBase64(item)
-        // })
         this.fileList = res.data.photosAddress
         this.houseDetail = res.data
       })
-    },
-    toBase64 (src) {
-      const canvas = document.createElement('canvas')
-      const context = canvas.getContext('2d')
-      canvas.width = 1440
-      canvas.height = 1080
-      const img = document.createElement('img')
-      // img.setAttribute('crossOrigin', 'Anonymous')
-      img.src = src
-      const self = this
-      context.drawImage(img, 0, 0, 1440, 1080)
-      console.log(canvas.toDataURL('image/jpeg', 0.5))
-      self.fileList.push({
-        content: canvas.toDataURL('image/jpeg', 0.8)
-      })
-      // img.onload = function () {
-      //   context.drawImage(img, 0, 0, 1440, 1080)
-      //   console.log(canvas.toDataURL('image/jpeg', 0.5))
-      //   self.fileList.push({
-      //     content: canvas.toDataURL('image/jpeg', 0.8)
-      //   })
-      // }
     },
     submit () {
       this.$api('/reservationHouse', 'post', {
@@ -132,6 +112,18 @@ export default {
       height: 300px;
       &:not(:first-child){
         margin-left: 20px;
+      }
+    }
+    .my-swipe .van-swipe-item {
+      color: #fff;
+      font-size: 20px;
+      text-align: center;
+      background-color: #39a9ed;
+      height: 350px;
+      margin-top: 20px;
+      img {
+        width: 100%;
+        height: 100%;
       }
     }
   }
