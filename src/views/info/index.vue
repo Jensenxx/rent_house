@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <my-header :title="'资讯'" :leftArrow="true" @goBack="$router.go(-1)"/>
+    <my-header :title="'资讯'"/>
     <van-tabs v-model="active" color="#1989fa">
       <van-tab title="资讯" ><house-info></house-info></van-tab>
       <van-tab title="问答"><house-answer></house-answer></van-tab>

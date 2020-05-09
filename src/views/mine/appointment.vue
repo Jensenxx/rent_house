@@ -16,6 +16,7 @@
             <p>手机号: {{item.reservationUserMobile}}</p>
             <p>看房时间: {{item.reservationDate | formatdate}}</p>
             <van-button size="small" type="info" @click="handleClickRent(index)">确认租用</van-button>
+            <van-button size="small" type="danger" class="del" @click="handleClickDel(item)">删除预约</van-button>
           </div>
         </div>
       </van-list>
@@ -122,6 +123,22 @@ export default {
       this.showDialog = true
       this.currentIndex = index
     },
+    handleClickDel (item) {
+      console.log(item)
+      this.$dialog.confirm({
+        title: '提示',
+        message: '确定要删除预约吗?'
+      }).then(() => {
+        this.$api('/deleteReservationHouse', 'get', {
+          houseReservationNum: item.houseReservationNum
+        }).then(res => {
+          this.showToast({ msg: '已删除预约' })
+          setTimeout(() => {
+            this.onRefresh()
+          }, 800)
+        })
+      })
+    },
     handleConfirmRent () {
       this.$api('contractHouse', 'post', {
         effectDate: new Date(this.rentTime),
@@ -165,8 +182,11 @@ export default {
       }
       .van-button--small{
         position: absolute;
-        right: 35px;
-        bottom: 90px;
+        right: 155px;
+        bottom: 15px;
+      }
+      .del{
+        right: 10px;
       }
     }
   }

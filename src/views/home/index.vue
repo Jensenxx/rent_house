@@ -1,10 +1,10 @@
 <template>
   <div>
-    <van-field
+    <!-- <van-field
       v-model="search"
       right-icon="search"
       placeholder="搜房源..."
-    />
+    /> -->
     <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
       <van-swipe-item v-for="(image, index) in images" :key="index">
         <img v-lazy="image" />

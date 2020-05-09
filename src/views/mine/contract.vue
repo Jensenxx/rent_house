@@ -208,7 +208,7 @@ export default {
         this.showContract = true
         this.contract = res.data
         const beginDate = new Date(this.contract.beginDate)
-        const endDate = new Date(this.contract.beginDate)
+        const endDate = new Date(this.contract.endDate)
         this.contract.beginDate = {
           year: beginDate.getFullYear(),
           month: beginDate.getMonth() + 1,
