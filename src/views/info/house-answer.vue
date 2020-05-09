@@ -19,7 +19,7 @@
           <div class="user-answer van-hairline--bottom" v-for="(item1, index1) in item.answerList" :key="index1">
             <p>{{item1.userName}}: {{item1.answerContent}}</p>
           </div>
-          <!-- <div class="open" @click="open(index)" v-if="item.tempList.length > 2">{{ item.openFlag ? '收起' : '展开' }}</div> -->
+          <div class="open" @click="open(item, index)" v-if="!item.answerFinished">展开</div>
         </div>
       </van-list>
     </van-pull-refresh>
@@ -63,8 +63,6 @@ export default {
   },
   data () {
     return {
-      mock: [],
-      temp: [],
       tiwenquestion: '',
       answerContent: '',
       questionList: [],
@@ -84,23 +82,8 @@ export default {
     }
   },
   methods: {
-    mockData () {
-      this.mock = [
-        { user: '腰还疼', answer: '非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好' },
-        { user: '腰还疼', answer: '非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好' },
-        { user: '腰还疼', answer: '非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好' },
-        { user: '腰还疼', answer: '非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好' },
-        { user: '腰还疼', answer: '非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好' },
-        { user: '腰还疼', answer: '非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好' },
-        { user: '腰还疼', answer: '非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好' },
-        { user: '腰还疼', answer: '非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好' }
-      ]
-      this.temp = this.mock
-      this.mock = this.mock.slice(0, 2)
-    },
-    open (index) {
-      this.questionList[index].openFlag = !this.questionList[index].openFlag
-      this.questionList[index].openFlag ? this.this.questionList[index].answerList = this.questionList[index].tempList : this.questionList[index].answerList = this.questionList[index].answerList.slice(0, 2)
+    open (item, index) {
+      this.getAnswerList(item, index)
     },
     onLoad () {
       this.getQuestionList()
@@ -114,6 +97,12 @@ export default {
         currentPage: this.currentPage,
         pageSize: this.pageSize
       }).then(res => {
+        res.data.datas.forEach((item, index) => {
+          item.answerList = []
+          item.answerCurrentPage = 1
+          item.answerPageSize = 3
+          item.answerFinished = false
+        })
         this.questionList = this.questionList.concat(res.data.datas)
         if (type === 'refresh') {
           this.questionList = []
@@ -122,28 +111,21 @@ export default {
         this.currentPage++
         this.loading = false
         this.finished = res.data.finished
-        this.questionList.forEach((item, index) => {
-          item.openFlag = false
-          this.getAnswerList(item.questionNum, index)
-        })
       })
     },
-    getAnswerList (num, index) {
+    getAnswerList (item, index) {
       console.log(index)
       this.$api('/listAnswerByQueNum', 'get', {
-        questionNum: num,
-        currentPage: 1,
-        pageSize: 9999
+        questionNum: item.questionNum,
+        currentPage: item.answerCurrentPage,
+        pageSize: item.answerPageSize
       }).then(res => {
         console.log(res)
         const list = res.data.datas
-        // list = list.concat(list).concat(list)
-        this.$set(this.questionList[index], 'answerList', list)
-        this.$set(this.questionList[index], 'tempList', list)
-        // if (this.questionList[index].answerList.length > 2) {
-        //   this.questionList[index].answerList = this.questionList[index].answerList.slice(0, 2)
-        // }
-        // this.questionList[index].answerList = list
+        item.answerCurrentPage++
+        item.answerFinished = res.data.finished
+        item.answerList = item.answerList.concat(list)
+        console.log(this.questionList[index])
       })
     },
     handleClickAnswer (index) {

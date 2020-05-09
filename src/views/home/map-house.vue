@@ -1,7 +1,7 @@
 <template>
   <div style="width:100%;height:100%">
     <my-header :title="'地图找房'" :leftArrow="true" @goBack="$router.go(-1)"/>
-    <baidu-map id="map" :zoom="zoom" @ready="handler" :center="center">
+    <baidu-map id="map" :zoom="zoom" @ready="handler" :center="center" scroll-wheel-zoom>
       <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
       <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
       <bm-marker :position="center"></bm-marker>
