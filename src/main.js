@@ -28,7 +28,8 @@ import {
   Field,
   Swipe,
   SwipeItem,
-  Lazyload
+  Lazyload,
+  ActionSheet
 } from 'vant'
 
 Vue.config.productionTip = false
@@ -53,6 +54,7 @@ Vue.use(gallery)
 Vue.use(Swipe)
 Vue.use(SwipeItem)
 Vue.use(Lazyload)
+Vue.use(ActionSheet)
 Vue.use(BaiduMap, {
   ak: 'lIXbW84tKu6oNCj0bbgTnau7'
 })

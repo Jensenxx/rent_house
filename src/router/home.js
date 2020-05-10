@@ -17,6 +17,14 @@ const routes = {
     {
       path: 'maphouse',
       component: () => import('../views/home/map-house.vue')
+    },
+    {
+      path: 'navmaphouse',
+      component: () => import('../views/home/navmap-house.vue')
+    },
+    {
+      path: 'navmaphousebus',
+      component: () => import('../views/home/navmapbus-house.vue')
     }
   ]
 }

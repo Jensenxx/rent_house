@@ -32,8 +32,7 @@
         <template>
           <input placeholder="" v-model.number="condition.minRent" maxlength="4"/>~
           <input placeholder="" v-model.number="condition.maxRent" maxlength="4"/>
-          <van-button size="small" type="info" @click="handleClickClose">附近房源</van-button>
-          <van-button size="small" type="info" style="margin-left: 15px" @click="onRefresh">查询</van-button>
+          <van-button size="small" type="info" style="margin-left: 55px" @click="onRefresh">查询</van-button>
         </template>
       </van-cell>
     </van-cell-group>
@@ -64,6 +63,7 @@
               <p>地址: {{item.address}}</p>
               <p>租金: {{item.rent}}/月</p>
               <p>距离: {{item.length}}公里</p>
+              <van-button size="small" type="info" @click.stop="handleClickBtn(index)">到这里</van-button>
             </div>
           </div>
         </van-list>
@@ -89,6 +89,7 @@
         </van-radio-group>
       </div>
     </van-popup>
+    <van-action-sheet v-model="showActionSheet" :actions="actions" @select="handleSelect" description="请选择出行方式"/>
   </div>
 </template>
 
@@ -145,7 +146,13 @@ export default {
         currentPage: 1, // 当前页码
         pageSize: 10, // 页码大小
         ownUserNum: ''
-      }
+      },
+      showActionSheet: false,
+      currentIndex: 0,
+      actions: [
+        { name: '公交' },
+        { name: '自驾' }
+      ]
     }
   },
   computed: {
@@ -226,6 +233,20 @@ export default {
         this.loading = false
         this.finished = true
       })
+    },
+    handleClickBtn (index) {
+      this.currentIndex = index
+      this.showActionSheet = true
+    },
+    handleSelect (val) {
+      console.log(val.name)
+      this.showActionSheet = false
+      val.name === '公交' && setTimeout(() => {
+        this.$router.push({ path: '/home/navmaphousebus', query: { data: this.houseList[this.currentIndex] } })
+      }, 800)
+      val.name === '自驾' && setTimeout(() => {
+        this.$router.push({ path: '/home/navmaphouse', query: { data: this.houseList[this.currentIndex] } })
+      }, 800)
     }
   },
   mounted () {
@@ -291,6 +312,7 @@ export default {
       width: 100%;
       height: 100%;
       padding: 40px 20px;
+      position: relative;
       h2{
         font-size: 16px; /*no*/
         font-weight: bold;
@@ -301,6 +323,11 @@ export default {
         &:first-child{
           margin-top: 5px;
         }
+      }
+      .van-button--small{
+        position: absolute;
+        right: 30px;
+        bottom: 15px;
       }
     }
   }

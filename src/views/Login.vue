@@ -23,8 +23,8 @@
     <van-col  span="10"><van-checkbox v-model="remember_user" @click="rememberUserClick">记住密码</van-checkbox></van-col>
     <van-col  span="8"><van-checkbox v-model="auto_login" @click="autoLoginClick">自动登录</van-checkbox></van-col>
   </van-row>
-
-  <van-button size="large" type="info" class="login-btn" @click="login">登录</van-button>
+  <span style="float:right" @click="$router.push('/register')">没有账号? 注册一个吧</span>
+  <van-button size="large" style="margin-top: 20px" type="info" class="login-btn" @click="login">登录</van-button>
 
   </div>
 </template>
@@ -47,8 +47,8 @@ export default {
   },
   data () {
     return {
-      user_name: '',
-      user_pwd: '',
+      user_name: 'lijunyang',
+      user_pwd: '123',
       remember_user: false,
       auto_login: false
     }
