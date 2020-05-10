@@ -1,6 +1,7 @@
 /* eslint-disable */
 <template>
   <div class="login-wrap">
+    <h1>即刻租</h1>
     <img alt="Vue logo" src="../assets/logo.png">
     <van-cell-group>
       <van-field
@@ -102,6 +103,10 @@ export default {
     .login-btn{
       margin: 15px 0;
       border-radius: 50px;
+    }
+    h1{
+      font-size: 24px; /*no*/
+      font-weight: bold;
     }
   }
 </style>
