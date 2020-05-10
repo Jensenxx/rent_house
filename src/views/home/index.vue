@@ -206,7 +206,7 @@ export default {
   }
   .house-container{
     width: 100%;
-    height: 380px;
+    height: 400px;
     background: #fff;
     display: flex;
     align-items: center;
