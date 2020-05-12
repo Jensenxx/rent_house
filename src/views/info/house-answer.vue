@@ -118,7 +118,7 @@ export default {
       this.$api('/listAnswerByQueNum', 'get', {
         questionNum: item.questionNum,
         currentPage: item.answerCurrentPage,
-        pageSize: item.answerPageSize
+        pageSize: 5
       }).then(res => {
         console.log(res)
         const list = res.data.datas
@@ -139,10 +139,15 @@ export default {
         questionNum: this.questionList[this.currentIndex].questionNum
       }).then(res => {
         console.log(res)
-        this.questionList.forEach((item, index) => {
-          item.openFlag = false
-          this.getAnswerList(item.questionNum, index)
+        this.questionList[this.currentIndex].answerList.push({
+          userName: this.userInfo.userName,
+          answerContent: this.answerContent
         })
+        this.answerContent = ''
+        // this.questionList.forEach((item, index) => {
+        //   item.answerCurrentPage--
+        //   this.getAnswerList(item, index)
+        // })
       })
     },
     handleConfirmTiwen () {
