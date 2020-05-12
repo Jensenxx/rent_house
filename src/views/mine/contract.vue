@@ -239,7 +239,7 @@ export default {
         const imgHeight = 592 / contentWidth * contentHeight
         const pageData = canvas.toDataURL('image/jpeg', 1.0)
         pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight)
-        pdf.save('合同')
+        pdf.save('合同.pdf')
       })
       console.log(this.downpdf)
     }

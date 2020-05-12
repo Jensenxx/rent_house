@@ -10,6 +10,7 @@
         clickable
         is-link
         disabled
+        clearable
         @click="showArea=true"
       />
       <van-field
@@ -24,7 +25,7 @@
           <input placeholder="" v-model.number="condition.minArea" maxlength="3"/>~
           <input placeholder="" v-model.number="condition.maxArea" maxlength="3"/>
           <van-dropdown-menu>
-            <van-dropdown-item v-model="value1" :options="option1" />
+            <van-dropdown-item v-model="value1" :options="option1" @change="handleChangeRentType" />
           </van-dropdown-menu>
         </template>
       </van-cell>
@@ -32,7 +33,8 @@
         <template>
           <input placeholder="" v-model.number="condition.minRent" maxlength="4"/>~
           <input placeholder="" v-model.number="condition.maxRent" maxlength="4"/>
-          <van-button size="small" type="info" style="margin-left: 55px" @click="onRefresh">查询</van-button>
+          <van-button size="small" type="info" style="margin-left: 15px" @click="handleInit">清空</van-button>
+          <van-button size="small" type="info" style="margin-left: 10px" @click="onRefresh">查询</van-button>
         </template>
       </van-cell>
     </van-cell-group>
@@ -177,6 +179,18 @@ export default {
         return res
       }, '')
     },
+    handleInit () {
+      this.address = ''
+      this.condition.province = null
+      this.condition.city = null
+      this.condition.region = null
+      this.value1 = 0
+      this.condition.rentType = null
+      this.condition.minArea = null
+      this.condition.maxArea = null
+      this.condition.minRent = null
+      this.condition.maxRent = null
+    },
     async onLoad () {
       await this.getLocation()
       this.getHourseList()
@@ -185,23 +199,8 @@ export default {
       this.condition.currentPage = 1
       this.getHourseList('refresh')
     },
-    handleConfirmRentType (value) {
-      this.showRentType = false
-      this.condition.rentType = value
-    },
     handleClick (id) {
       this.$router.push(`/home/houseDetail/${id}`)
-    },
-    handleClickBaiduList (item) {
-      this.radio = `${item.province} - ${item.city} - ${item.district} - ${item.name}`
-      this.address = `${item.province} - ${item.city} - ${item.district}`
-      this.condition.province = item.province
-      this.condition.city = item.city
-      this.condition.region = item.district
-      this.condition.descAddress = item.name
-      this.condition.xposition = item.location.lng
-      this.condition.yposition = item.location.lat
-      this.showAddressBaidu = false
     },
     getLocation () {
       return new Promise(resolve => {
@@ -247,6 +246,11 @@ export default {
       val.name === '自驾' && setTimeout(() => {
         this.$router.push({ path: '/home/navmaphouse', query: { data: this.houseList[this.currentIndex] } })
       }, 800)
+    },
+    handleChangeRentType (value) {
+      const arr = ['', '整租', '合租']
+      this.condition.rentType = arr[value]
+      console.log(value)
     }
   },
   mounted () {
