@@ -13,7 +13,7 @@
     "core-js": "^3.6.4",
     "html2canvas": "^1.0.0-rc.5",
     "img-vuer": "^0.19.2",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.5.1",
     "lib-flexible": "^0.3.2",
     "pdfvuer": "^1.6.0",
     "postcss-loader": "^3.0.0",
